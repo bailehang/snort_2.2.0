@@ -1,0 +1,105 @@
+# $Id: 1520.txt,v 1.2.2.2 2004/08/10 13:52:04 bmc Exp $
+
+Rule:  
+
+
+--
+Sid:
+
+1520
+
+--
+Summary:
+
+Access to the "/server-info" url was detected.  Using the Apache webserver,
+this url is generally handled by the mod_info module, which will happily
+disclose valuable information about your webserver which may aid in their
+attack.
+
+--
+Impact:
+
+If mod_info is in use and the attacking host is allowed to access it, they
+will be able to see every possible configuration option that your Apache
+server is using.  This includes ACLs, modules, file and directory names, and
+other valuable information that will help an attacker determine ways of
+attacking your server.
+
+--
+Detailed Information:
+
+The mod_info module "provides a comprehensive overview of the server
+configuration including all installed modules and directives in the
+configuration files" for the Apache webserver.  Successfully accessing the url
+that is handle by mod_info may give an attacker valuable information about
+your server.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+
+As part of an attack against your Apache webserver, an attacker may try to
+access "/server-info" which is typically handled by the mod_info module.  If
+cuessful, this will give them valuable information about your webserver,
+including all modules, versions, file names and directories, usernames, and
+ACLs.  This will help them determine what ways to attack your Apache server,
+or ways to attack the machine itself. 
+
+--
+Ease of Attack:
+
+Trivial.  All that is needed is the ability to access this host + url:
+
+`lynx http://victim/server-info`
+
+--
+False Positives:
+None Known
+
+Few, but certainly possible.  Since this rule only checks for the
+existance of "/server-info" in the url, any url containing that string will
+trigger this rule.  A few common false positives may include urls like:
+
+http://victim/server-info/contact.html
+http://victim/really/long/directory/server-info.html
+
+--
+False Negatives:
+None Known
+
+Rare.  The default location that the mod_info module watches is /server-info,
+but this can be changed by the owner of the server.  If this is changed (say,
+to something like /server_info), this snort rule will not catch the attack.
+However, an attacking host will have to guess if the default location has been
+changed.
+
+--
+Corrective Action:
+
+Determine if server-info exists on the victim in question, and if the attacker
+is allowed to access it.  If so, evaluate what information the attacker would
+have gained.  If mod_info is necessary on this server, consider restricting
+access to it via Apache directives, i.e.:
+
+
+<Location /server-info>
+    SetHandler server-info
+    Order deny,allow
+    Deny from all
+    Allow from .yourdomain.net
+</Location>
+
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+
+Jon Hart <warchild@spoofed.org>
+
+-- 
+Additional References:

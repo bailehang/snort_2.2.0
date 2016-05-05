@@ -1,0 +1,102 @@
+# This is a template for submitting snort signature descriptions to
+# the snort.org website
+#
+# Ensure that your descriptions are your own
+# and not the work of others.  References in the rules themselves
+# should be used for linking to other's work.
+#
+# If you are unsure of some part of a rule, use that as a commentary
+# and someone else perhaps will be able to fix it.
+#
+# $Id: 1408.txt,v 1.3.2.2 2004/08/10 13:52:03 bmc Exp $
+#
+#
+
+Rule:  DOS MSDTC attempt
+
+--
+Sid: 1408
+
+--
+Summary:
+A TCP packet having a large payload was detected. This is a possible 
+indication of an actual or impending denial of service attack against a 
+host running the Microsoft Distributed Transaction Service Coordinator 
+(MSDTC).
+
+--
+Impact:
+
+According to Bugtraq, sending such packets to MSDTC can cause the server to 
+crash, resulting in a host denial of service. Restarting the service will 
+enable it to resume normal operation.
+
+--
+Detailed Information:
+
+According to Bugtraq, MSDTC is installed by default on Windows 2000. It is 
+also installed by default with Microsoft SQL Server, versions 6.5 and 
+later. According to Microsoft TechNet, the service is required by Internet 
+Information server. The service listens by default on port 3372.
+
+According to the original reporter, Windows 2000 SP2 is vulnerable to this 
+attack, which does not invariably succeed. The original report was dated 
+January 31, 2002. As of March 30, 2002, no patch to fix the vulnerability 
+was known to exist. Moreover, Microsoft was not known to have confirmed the 
+existence of the problem.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+Under Unix, use /dev/random to generate 1024 bytes of random data and pipe 
+the data to the target host and port via netcat (Source: SecurityTracker). 
+The attack does not depend on two-way communication with the victim, so the 
+source IP address can be spoofed by using a packet crafter.
+
+--
+Ease of Attack:
+The attack can be easily mounted, using any tool that can send crafted 
+packets or Unix commands.
+
+--
+False Positives:
+None Known
+Linux FTP servers and clients frequently transfer TCP packets having a 
+payload size larger than 1023 bytes. To distinguish a false positive, 
+determine whether MSDTC is running on the indicated destination source and 
+port.
+
+--
+False Negatives:
+None Known
+The Snort rule examines only the payload size. Therefore, false negatives 
+are unlikely unless MSDTC is vulnerable to smaller packets than currently 
+thought.
+
+--
+Corrective Action:
+To manage the vulnerability, configure the system not to autmatically start 
+the MSDTC (Source: Security Operations Guide for Windows 2000 Server). 
+Alternatively, configure firewall rules to limit access to the service. To 
+eliminate false positives, revise the Snort rule to specify IP addresses of 
+only those hosts actually running the service.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Originally reported by palante@subterrain.net
+Snort signature description by bmccarty@apu.edu
+
+--
+Additional References:
+
+bugtraq,4006
+url,www.securitytracker.com/alerts/2002/Feb/1003415.html
+url,www.microsoft.com/TechNet/security/tools/iis4cl.asp
+url,www.microsoft.com/TechNet/archive/transsrv/mtxpg03.asp
+url,www.microsoft.com/TechNet/prodtechnol/sql/maintain/featusability/c08ppcsq.asp

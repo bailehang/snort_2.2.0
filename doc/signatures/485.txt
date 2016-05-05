@@ -1,0 +1,78 @@
+
+--
+Rule:
+(Communication Administratively Prohibited)"; itype: 3; icode: 13;
+sid:485; classtype:misc-activity; rev:2;) 
+
+--
+Sid:
+485
+
+--
+Summary:
+A router was unable to forward a packet due to filtering and used the
+Internet Control Message Protocol to alert involved hosts.
+
+--
+Impact:
+This particular message is meant only to be informative but can be
+indicative of malicious activity (spoofed traffic, DOS).
+
+--
+Detailed Information:
+A packet sent between two points on a network was administratively
+prohibited via filtering of some sort.  The router that did the
+filtering returned an ICMP message informing the apparent source host
+of the filtering.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+In a DOS attack it is common to to use spoofed source addresses.  If
+and when the traffic gets filtered and an ICMP message is returned,
+the spoofed source address will be the recipient of the ICMP message.
+A similar situation may occur when a large portscan is occuring and an
+attempt is made to mask the true source of the scan by tossing in
+spoofed source addresses.  
+
+--
+Ease of Attack:
+Easy.  Tools are readily available that can craft arbitrary ICMP
+packets.  It is also possible to spoof packets using arbitrary
+addresses potentially causing intermediary routers to generate ICMP
+messages.
+
+--
+False Positives:
+None Known
+None.
+
+--
+False Negatives:
+None Known
+None.
+
+--
+Corrective Action:
+None needed unless messages become excessive or appear to be invalid. 
+Determine what traffic caused this particular ICMP message to be
+generated and act accordingly.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Warchild <warchild@spoofed.org>
+
+-- 
+Additional References:
+ftp://ftp.isi.edu/in-notes/rfc1812.txt
+
+_______________________________________________
+Snort-sigs mailing list
+Snort-sigs@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/snort-sigs

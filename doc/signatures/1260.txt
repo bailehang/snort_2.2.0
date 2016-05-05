@@ -1,0 +1,54 @@
+# This is a template for submitting snort signature descriptions to
+# the snort.org website
+#
+# Ensure that your descriptions are your own
+# and not the work of others.  References in the rules themselves
+# should be used for linking to other's work. 
+#
+# If you are unsure of some part of a rule, use that as a commentary
+# and someone else perhaps will be able to fix it.
+# 
+# $Id: 1260.txt,v 1.2.2.2 2004/08/10 13:52:03 bmc Exp $
+#
+# 
+
+Rule: alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS 80 (msg:"WEB-MISC long basic authorization string"; flow:to_server; flags:A+; content:"Authorization\: Basic "; nocase; dsize:>1000; classtype:attempted-dos; reference:bugtraq,3230; sid:1260; rev:3;) 
+
+--
+Sid: 1260
+
+--
+Summary: AOLServer Long Authentication String Buffer Overflow Vulnerability
+
+--
+Impact: Crash AOLServer, run code of attackers choice
+
+--
+Detailed Information: AOLServer is a freely available, open source web server. It was originally written by AOL, and is currently developed and maintained by AOL and public domain. 
+
+A problem has been discovered that can allow remote users to crash an AOLServer, denying service to legitimate users of the system. The problem is due to the handling of passwords. It is possible for a remote user to overflow a buffer within the AOLServer process by sending a password of 2048 bytes. This could result in the overwriting of stack variables, including the return address. 
+
+This makes it possible for a remote user to execute arbitrary code with the privileges of the AOLServer process, and potentially gain local access.
+
+--
+Attack Scenarios: A attacker sends a specially crafted Basic Authorisation string to overflow the interal buffer.  She may then gain access with the same privileges as AOLServer
+
+--
+Ease of Attack: Exploits are available.
+
+--
+False Positives: Any Basic Authorisation request with data > 1000 will trigger this alert.  If the autorisation is preceded by a long url this rule will be triggered.
+
+--
+False Negatives: Not known
+
+--
+Corrective Action: Upgrade to AOLServer 3.4.
+
+--
+Contributors: Detailed Information obtained from SecurityFocus.
+False Positive information by John Berkers
+
+-- 
+Additional References:
+Bugtraq, 3230

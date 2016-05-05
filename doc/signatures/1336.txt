@@ -1,0 +1,47 @@
+Rule:
+
+--
+Sid:
+1336
+
+--
+Summary:
+Attempted chmod command access via web
+
+--
+Impact:
+Attempt to change file permissions on a webserver.
+
+--
+Detailed Information:
+This is an attempt to change file permissions on a machine. Using this command an attacker may change the permissions of a file to suit his own needs, make a file readable, writeable or excutable to other groups and users that would otherwise not have these special permissions.
+
+--
+Attack Scenarios:
+The attacker can make a standard HTTP request that contains '/bin/chmod' in the URI which can then change file permissions of files present on the host.  This command may also be requested on a command line should the attacker gain access to the machine.
+
+--
+Ease of Attack:
+Simple HTTP request.
+
+--
+False Positives:
+None Known
+
+--
+False Negatives:
+None Known
+
+--
+Corrective Action:
+
+Webservers should not be allowed to view or execute files and binaries outside of it's designated web root or cgi-bin.  Whenever possible, sensitive files and certain areas of the filesystem should have the system immutable flag set to negate the use of the chmod command. On BSD derived systems, setting the systems runtime securelevel also prevents the securelevel from being changed. (note: the securelevel can only be increased)
+
+--
+Contributors:
+Sourcefire Research Team
+
+-- 
+Additional References:
+sid: 1337
+sid: 1338

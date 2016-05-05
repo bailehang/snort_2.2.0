@@ -1,0 +1,63 @@
+# This is a template for submitting snort signature descriptions to
+# the snort.org website
+#
+# Ensure that your descriptions are your own
+# and not the work of others.  References in the rules themselves
+# should be used for linking to other's work. 
+#
+# If you are unsure of some part of a rule, use that as a commentary
+# and someone else perhaps will be able to fix it.
+# 
+# $Id: 1066.txt,v 1.2.2.2 2004/08/10 13:52:03 bmc Exp $
+#
+# 
+
+Rule:  WEB-MISC telnet attempt
+
+--
+Sid:1066
+
+--
+Summary:This an attempt from an attacker to access telnet.exe on a Windows based OS.
+
+--
+Impact: HIGH/MEDIUM
+
+--
+Detailed Information: If the attacker has access to the telnet executable he/she will
+be able to use it to log into another server. If the attacker has access to telnet.exe
+they might also have access to many other system files.
+
+--
+Attack Scenarios: If a web server that has been misconfigured or compromised the attacker
+might have access to other systems via these commands that are in the same directory as
+the telnet.exe file is.
+
+--
+Ease of Attack: This attack would not be hard. It would rely on some other vulnerability
+though. In itself I don't see how telnet.exe would do anything, but by gaining access to 
+this file they might have access to many other files that could help them gain more information
+about the server.
+
+--
+False Positives: This does not tell weather the file was successfully accessed or not. An attack
+could send a URL with "telnet.exe" in it and alert would be triggered. Look at the packet decode
+to determing how the telnet.exe file was accessed.
+
+--
+False Negatives: Depending on other vulnerabilities an attacker could malform the URL so that the
+NIDS does not see any content that has "telnet.exe", but when the server reassembles the packet
+it sees it as "telnet.exe"
+
+--
+Corrective Action: Check to see if the server is misconfigured or has been compromised.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+
+-- 
+Additional References:

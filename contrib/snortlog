@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+# Syslog analysis script orignially written by
+# Angelos Karageorgiou <angelos@StockTrade.GR> and
+# tweaked by Martin Roesch <roesch@clark.net>
+
+if($ARGV[1] eq undef)
+{
+   print "USAGE: snortlog <logname> <machinename>\n";
+   print "EXAMPLE: snortlog /var/log/messages sentinel\n";
+   print "Note: The machine name is just the hostname, not the FQDN!\n";
+   exit;
+}
+
+$machine = $ARGV[1];
+
+$targetlen=25;
+$sourcelen=35;
+$protolen=12;
+
+use Socket;
+
+
+open(LOG,"< $ARGV[0]") || die "No can do";
+
+printf("%15s %-35s %-25s %-25s\n","DATE","WARNING", "FROM", "TO");
+print "=" x 100;
+print "\n";
+while(<LOG>) {
+        chomp();
+        if ( 
+                ( !  /.*snort*/gi )
+           ) { next ; }
+
+        $_ =~ s/ $machine snort//gi ;
+        $date=substr($_,0,15);
+        $rest=substr($_,16,500);
+
+
+
+        @fields=split(": ", $rest);
+        $text=$fields[0];
+
+
+        $fields[1] =~ s/ \-\> /-/gi;
+        ($source,$dest)=split('-', $fields[1]);
+
+
+        ($host,$port)=split(':',$source);
+
+
+        $iaddr = inet_aton($host); # or whatever address
+        $name  = gethostbyaddr($iaddr, AF_INET);            
+        if ( $name =~ /^$/ ) {
+                $name=$host;
+        }
+        $name = $name . ":" .  $port;
+
+        $skipit=0;
+
+        ($shost,$sport)=split(':',$dest);
+        $sport =~ s/ //gi;
+        $siaddr = inet_aton($shost); # or whatever address
+        $sname  = gethostbyaddr($siaddr, AF_INET) ;            
+        if ( $sname =~ /^$/ ) {
+                $sname=$shost;
+        }
+        $sname = $sname . ":" .  $sport;
+        printf("%15s %-32s %-30s   %s\n",
+                $date, $text,
+                $name,$sname);
+
+}
+close(LOG);

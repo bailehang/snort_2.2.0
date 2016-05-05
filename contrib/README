@@ -1,0 +1,63 @@
+What you find here are scripts/files which are not part of snort, but
+are essential/helpful to get some of its features working.
+
+Below is a brief description of each file:
+
+ACID - see http://www.andrew.cmu.edu/~rdanyliw/snort/snortacid.html instead
+
+Guardian - a script that automatically reconfigures ipchains firewalls 
+based on Snort alerts
+
+Net-SnortLog-0.1.tar.gz - a Perl module for manipulating snort log files.
+
+SnortSnarf - Code to parse a file of snort alerts and produce
+HTML output intended for diagnostic inspection and tracking down problems.  
+The model is that one is using a cron job or similar to produce a 
+daily/hourly/whatever file of snort alerts. This script can be run on each
+such file to produce a convenient HTML breakout of all the alerts.
+
+Spade - SPADE stands for the Statistical Packet Anomaly Detection Engine. It
+is a Snort preprocessor plugin which sends alerts of anomalous packet through
+standard Snort reporting mechanisms.
+
+address_config.sh - enables Snort to change its address space quickly and 
+painlessly.
+
+create_mysql - contains the SQL to create tables for MySQL database logging
+
+create_postgresql - contains the SQL to create tables for PostgreSQL database 
+logging
+
+mysql.php3 - display your MySQL database events from your PHP web servers
+
+passiveOS.tar.gz - Craig Smith has finished writing the Passive OS detection
+for snort (log_dir and alert file) 
+
+pgsql.php3 - display PostgreSQL database events from your PHP web servers
+
+snml.dtd - A copy of the DTD that the XML plugin conforms to.
+
+snort-sort.pl - this script produces a sorted list of snort alerts from a snort
+alert file
+
+snort2html.pl - generates web pages from snort alerts
+
+snort_stat.pl - perl script that provides a statistical analysis of syslog
+alerts produced by Snort
+
+snortdb-extra.gz - Contains database tables that supplement the base tables 
+required for database support in snort in order to make data more human 
+readable.
+
+snortlog - perl script that provides syslog alert summaries and reverse
+attacker name resolution
+
+snortnet.tar.gz - SnortNet is a research project that targets development of
+a Distributed Intrusion Detection System (DIDS) based on snort NIDS as a node
+sensor.
+
+snortwatch-0.7 - This is a little tool to help keep track of alerts generated
+by the excellent IDS tool snort. I've mostly tested snortwatch against version
+1.5.x of snort and although the output of 1.6 seems very similar if not to say
+identical, there may still be some type of alert I haven't come across that
+could throw off the parsing. 

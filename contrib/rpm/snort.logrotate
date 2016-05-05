@@ -1,0 +1,13 @@
+# /etc/logrotate.d/snort
+# $Id: snort.logrotate,v 1.3 2003/12/12 02:05:51 cazz Exp $
+
+/var/log/snort/alert /var/log/snort/*log /var/log/snort/*/alert /var/log/snort/*/*log  {
+    daily
+    rotate 7
+    missingok
+    compress
+    postrotate
+	/etc/init.d/snortd restart 1>/dev/null || true
+    endscript
+}
+

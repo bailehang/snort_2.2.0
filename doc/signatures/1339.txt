@@ -1,0 +1,45 @@
+Rule:
+
+--
+Sid:
+1339
+
+--
+Summary:
+Attempted chsh command access via web
+
+--
+Impact:
+Attempt to change a users shell on a webserver.
+
+--
+Detailed Information:
+This is an attempt to change a users shell on a machine. Using this command an attacker may change the shell of a user to suit his own needs. By changing the shell an attacker may further compromise a machine by specifying a shell that could contain a Trojan Horse component or that could contain embedded commands specially crafted by an attacker.
+
+--
+Attack Scenarios:
+The attacker can make a standard HTTP request that contains '/bin/chsh' in the URI which can then change the shell of a user present on the host.  This command may also be requested on a command line should the attacker gain access to the machine.
+
+--
+Ease of Attack:
+Simple HTTP request.
+
+--
+False Positives:
+None Known
+
+--
+False Negatives:
+None Known
+
+--
+Corrective Action:
+
+Webservers should not be allowed to view or execute files and binaries outside of it's designated web root or cgi-bin.  Whenever possible, sensitive files and certain areas of the filesystem should have the system immutable flag set to negate the use of the chsh command. On BSD derived systems, setting the systems runtime securelevel also prevents the securelevel from being changed. (note: the securelevel can only be increased)
+
+--
+Contributors:
+Sourcefire Research Team
+
+-- 
+Additional References:

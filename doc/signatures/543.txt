@@ -1,0 +1,73 @@
+Rule:  
+1MB\" possible warez site"; flags: A+; content:"STOR 1MB"; nocase; 
+depth: 8; classtype:misc-activity; sid:543; rev:2;)
+
+
+--
+Sid:
+543
+
+--
+Summary:
+An attempt to store a file named "1mb" was detected on your ftp
+server.
+
+--
+Impact:
+Possible abuse ftp behavior by hordes of warez sites, and the
+existance of (potentially) illegal files/software on your ftp server.
+
+--
+Detailed Information:
+Warez sites have been known to name "warez" files by their size.  Large
+files are split into smaller, more manageable chunks, and allow warez
+sites to store large files on ftp sites in a semi-organized manner.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+As part of an attempt to store elite warez on your ftp server, an
+attacker named his/her file "1mb" to indicate it's size.  This file is
+likely part of an archive that represents a larger, most likely
+illegal copy of media.
+
+--
+Ease of Attack:
+If your ftp server allows write access (presumeably, anonymous), this
+is trivial.  
+
+--
+False Positives:
+None Known
+If a legitimate user has a legitimate file named "1mb", this rule may
+get triggered inappropriately.
+
+--
+False Negatives:
+None Known
+This will detect only files named 1mb.  If a warez site decides to
+start naming their files in a more clever fashion (such as
+02072002/10mb), this rule will not get triggered, and the abuse may
+pass undetected.
+
+--
+Corrective Action:
+Inspect your ftp server for a file named 1mb.  If it exists, determine
+if the file is legitimate, or if it was (yet another) case of a warez
+site abusing ftp.  Furthermore, evaluate your need for ftp write
+access.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Jon Hart <warchild@spoofed.org>
+
+-- 
+Additional References:
+
+

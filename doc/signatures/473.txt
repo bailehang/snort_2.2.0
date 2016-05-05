@@ -1,0 +1,46 @@
+Rule:  alert icmp $EXTERNAL_NET any -> $HOME_NET any (msg:"ICMP redirect net";itype:5;icode:0; reference:arachnids,199; reference:cve,CVE-1999-0265; classtype:bad-unknown; sid:473; rev:1;) 
+
+--
+
+Sid: 473
+
+--
+
+Summary:  An ICMP Redirect Network message was sent to a host on your network.
+
+--
+Impact:  System Crash, Denial of Service
+
+--
+Detailed Information:  Several susceptible IP Stack implementations may result in the system hanging or crashing when malformed or corrupted ICMP Redirect Network (Type 5, Code 0) packets are sent to them.  This vulnerability was first discovered in 1997.
+
+Under normal network conditions ICMP Redirect Network packets will occur in a number of situations.  One such situation is when a host is on a subnet with more than one router.  The host can only have one default gateway, and forwards all traffic for networks outside its own subnet to this gateway.  If the default gateway detects that the gateway for this route is on the same subnet as the originating host, the default gateway forwards the packet onto this gateway and sends an ICMP Redirect Network to the originating host.
+
+This funtionality exists primarily to save network administrators from having to keep extensive routing tables on hosts, the host will remember the route learnt from the ICMP Redirect Network message for a period of time, and will forward any traffic directly while it has the route in its cache.
+
+--
+Attack Scenarios:  A malicious user may send corrupted ICMP Redirec Net message to your networks in an attempt to crash a system.
+
+--
+Ease of Attack: It is not known if any exploits are widely available.
+
+--
+False Positives: Any ICMP Network Redirect will trigger this alert.  The use of $EXTERNAL attempts to reduce the number of false positives, however it is likely that a number of legitimate packets will be seen.
+
+--
+False Negatives:
+None Known
+
+--
+Corrective Action:  Patches for Microsoft Windows NT 4.0 were included in SP4, and also release as a post SP3 fix - teardrop2-fix.  Fixes are also available for Windows 95 and various embedded systems.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+
+--
+Additional References:
+Microsoft KB, Q154174

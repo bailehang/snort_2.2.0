@@ -1,0 +1,78 @@
+Rule:  
+attempt"; content:"|07|authors"; offset:12; content:"|04|bind";
+nocase; offset: 12; reference:arachnids,480;
+classtype:attempted-recon; sid:256; rev:1;) 
+--
+Sid:
+256
+
+--
+Summary:
+An attempt was made to query authors.bind chaos record on your DNS server.  
+--
+Impact:
+Allows a remote attacker to possibly determine the version of bind
+you are running.
+
+--
+Detailed Information:
+Bind 9.x allows you get the authors.bind chaos record.  The ability to
+retrieve this file indicates that the machine is running at least a
+9.x variant of the bind nameserver.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+As part of a reconnaissance mission, an attacker may attempt to gleen
+important information about your infrastructure by determining your
+bind version.  If authors.bind is retrievable, this indicates that you
+are running Bind 9.x.  If not, it means nothing.  This, in addition to
+possibly retrieving version.bind, allows attackers to craft attacks
+specially suited for your environment.
+
+--
+Ease of Attack:
+Trivial:
+
+warchild@cuba
+[~]$ dig +short @testhost.com txt chaos authors.bind
+
+"Bob Halley"
+"Mark Andrews"
+"James Brister"
+"Michael Graff"
+"David Lawrence"
+"Michael Sawyer"
+"Brian Wellington"
+"Andreas Gustafsson"
+
+
+--
+False Positives:
+None Known
+None.
+
+--
+False Negatives:
+None Known
+None.
+
+--
+Corrective Action:
+Remove the ability to retrieve the authors.bind chaos record by either
+applying the patch from ISC or tweaking your configs accordingly.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Jon Hart <warchild@spoofed.org>
+
+-- 
+Additional References:
+
+

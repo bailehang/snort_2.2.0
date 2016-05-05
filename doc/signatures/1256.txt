@@ -1,0 +1,75 @@
+Rule:  
+lert tcp $EXTERNAL_NET any -> $HTTP_SERVERS 80 (msg:"WEB-IIS CodeRed v2
+root.exe access"; flags: A+; uricontent:"scripts/root.exe?"; nocase;
+classtype:web-application-attack; sid:1256; rev:2;) 
+
+--
+Sid:
+1256
+
+--
+Summary:
+A remote machine attempted to access the root.exe executable on your
+webserver. 
+
+--
+Impact:
+Only affects Windows machines with a listening webserver, primarily IIS.
+If root.exe does not exist, there is no impact aside from minor iritation.
+If root.exe _does_ exist, full system-level access at the priveledge level
+of the user running the webserver is possible.
+
+--
+Detailed Information:
+As part of the CodeRed infection process, cmd.exe (the windows command
+interpreter) gets copied to a number of locations throughout the
+filesystem and named root.exe.  Following a modification to the registry,
+root.exe becomes available from the web, allowing remote machines to
+execute arbitrary commands.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+Normally, access to root.exe is detected as part of an attempted infection
+by another machine already infected by CodeRed.  In other situations,
+root.exe may be accessed by remote machines/users in an attempt to gain
+access to your system.
+
+--
+Ease of Attack:
+Anyone with access to a browser or a telnet/nc connection to port 80 on the
+victim machine can test and/or exploit this vulnerability.
+
+
+--
+False Positives:
+None Known
+Unknown.
+
+--
+False Negatives:
+None Known
+None for CodeRed v2.  If cmd.exe gets renamed to something else (perhaps,
+backdoor.exe), traffic will pass undetected.
+
+--
+Corrective Action:
+If root.exe does exist on your filesystem, remove the machine from your
+network and follow your vendor's recommend method for cleaning and
+repairing the havok wreaked by this particular worm.
+
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Jon Hart <warchild@spoofed.org>
+
+-- 
+Additional References:
+http://www.cert.org/advisories/CA-2001-19.html
+

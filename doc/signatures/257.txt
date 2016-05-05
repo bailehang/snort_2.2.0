@@ -1,0 +1,55 @@
+Rule:
+--
+Sid: 257
+
+--
+Summary: A remote machine attempted to determine the version of your DNS
+server.
+
+--
+Impact: Could indicate an impending attack, or maybe an innocent
+reconnaissance attempt. 
+
+--
+Detailed Information: A remote machine attempted to determine the version
+of your BIND DNS server.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+As part of reconnaissance leading upto a potential intrusion attempt, an
+attacker may attempt to determine the BIND version that you are running in
+hopes of finding an unpatched version.
+
+--
+Ease of Attack:
+Simple
+--
+False Positives:
+None Known
+None.
+
+--
+False Negatives:
+None Known
+None.
+
+--
+Corrective Action:
+Disable the ability for untrusted (remote) machines to determine your named
+version.  
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Jon Hart <warchild@spoofed.org>
+
+-- 
+Additional References:
+
+

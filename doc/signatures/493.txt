@@ -1,0 +1,65 @@
+Rule:  alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"INFO psyBNC access";
+content:"Welcome!psyBNC@lam3rz.de"; flags:A+; classtype:bad-unknown; sid:493;
+rev:2;) 
+
+--
+Sid: 493
+
+--
+Summary: 
+Possible access to the psyBNC IRC "bouncer" was detected.
+
+--
+Impact: 
+
+
+--
+Detailed Information:
+The psyBNC IRC bouncer was designed to hold a connection to an IRC server.  As part
+of the connection process, a psyBNC server will respond with
+"Welcome!psyBNC@lam3rz.de".
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+The psyBNC server itself is not necessarily a risk in itself, but this may be a
+violation of your AUP.  Furthermore, psyBNC has found it's way into a large number
+of rootkits, both as an IRC bouncer and as remote control agent for dDOS networks.
+
+--
+Ease of Attack:
+Any user can install psyBNC.
+
+--
+False Positives:
+None Known
+Since this rule looks for the psyBNC string to/from any port, any tcp connection
+that contains "Welcome!psyBNC@lam3rz.de" will trigger this rule.  
+
+
+--
+False Negatives:
+None Known
+A modified psyBNC server will not respond with "Welcome!psyBNC@lam3rz.de" and could
+easily evade this rule.
+
+
+--
+Corrective Action:
+Check the originating host IP and source port and investigate the possibility of a
+listening psyBNC server and possible system comprimise.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Jon Hart <warchild@spoofed.org>
+
+-- 
+Additional References:
+http://www.psychoid.lam3rz.de/
+

@@ -1,0 +1,51 @@
+2004-08-11 - Snort 2.2.0 Final Released
+
+* Updated database schema diagram from Chris Reid. Schema can be found in
+  ./doc/snort_schema_v106.pdf
+
+* Added --include-pcre* configuration option to help cross compiling.
+  Thanks Erik de Castro Lopo.
+
+* Fixed thresholding/suppression issue with queuing multiple
+  events per packet.  Thanks Andreas Ostling.
+
+* When a rebuilt stream causes an alert, log out the original packets
+  instead of the rebuilt packet.  Thanks sekure@gmail.com for the report.
+
+* Turned off http_inspect alerts that were causing false positives in the
+  preset webserver profiles.
+
+* Turn off encoding alerts in HTTP parameter field.  The parameter field
+  is still normalized, it just doesn't alert.  This helps reduce alerts
+  that are generated from complex parameter queries.
+
+* Fixed memory leak in "fast" output.  Thanks for your bug report
+  sekure@gmail.com.
+
+* Clear error code which under Windows was causing a subsequent false
+  failure in parsing threshold rules.  (thanks to Rich Adamson)
+
+2004-06-28 - Snort 2.2.0 RC1 Released
+
+* Added new TCP state engine
+
+* Added ASN.1 parsing and detection functionality to snort.  Please refer
+  to README.asn1 for more information on rule usage.
+
+* Fixed rebuilt TCP packet munging reported by Steve Halligan.  Thanks a
+  lot for getting this problem down to pcap so we could analyze the problem.
+
+* Improve TCP reassembly flushing for TCP streams that have already
+  generated an alert.  This was illustrated by Brian Bailey in his SANS
+  GIAC practical examination.  Thanks for working with us on this one.
+
+* Added webroot alert.  This alert is generated when a URL directory
+  traversal traverses past the webroot.  Added new URI discovery
+  technique pointed out by Kanatoko.
+
+* New Aho-Corasick pattern matchers.  Added content length tracking on
+  otnx structures.
+
+* Chunked Encoding false positives fixed in http_inspect. Thanks Lindsey
+  Cheng for finding the problem.
+ 

@@ -1,0 +1,93 @@
+#!/usr/bin/perl
+# $Id: sid-add,v 1.3 2001/08/21 17:56:39 cazz Exp $
+# Copyright (C) 2001 Brian Caswell <bmc@mitre.org>
+#
+# sid-add - Add SIDs and Revision to any rule that does not have an SID.
+# NOTE: This does not handle multi-line rules yet.  
+# NOTE: This is very ugly code but it works.  Feel free to rewrite it
+if (($ARGS[0]))
+{ 
+  print "USAGE: sid-add <SNORT-RULES-FILE> [<SNORT_RULES_DIRECTORY>]\n"; 
+  exit 0;
+}
+
+if ($ARGS[1]) { $DIR = $ARGS[1]; }
+
+### CONFIGURATION
+# Where are your snort rules held?
+# (CWD by default)
+my $DIR = "./";
+
+# Where is your latest SID?  (Personal rules start at 1000000)
+my $SID = "$DIR/personal-sid";
+
+# Where is your sid-msg.map?
+my $SIDMAP = "$DIR/sid-msg.map";
+### END OF CONFIGURATION
+
+
+
+open MSG, ">>$SIDMAP";
+
+open SID, "<$SID";
+while ($line = <SID>)
+{
+   if ($line =~ /^\d+$/)
+   {
+      $sid = $line;
+   }
+}
+close SID;
+chomp($sid);
+
+if ($sid < 1000000) { $sid = 1000000; }
+
+
+open RULES, "$ARGV[0]";
+
+while (<RULES>)
+{
+   $rule = $_;
+   $rule =~ s/\n$//;
+   if ($rule !~ /^#/)
+   {
+      if ($rule !~ /sid:\d+;/)
+      {
+         if ($rule =~ /\(.*\)$/)
+         {
+            $rule =~ s/(.*)\s+$/$1/;
+            $rule =~ s/ (msg:\")/$1/;
+            $rule =~ s/msg: \"/msg:\"/;
+            $msg = $rule;
+            $msg =~ /.*msg:\"([^"]+)/;
+            $msg = $1;
+            $ref = $rule;
+            my @refs;
+            while ($ref =~ s/(.*)reference:([^\;]+)(.*)$/$1 $3/)
+            { 
+               push (@refs,$2);
+            }
+
+            $sid++;
+            if ($msg) 
+            { 
+               print MSG "$sid || $msg";
+	       foreach (@refs) { print MSG " || $_"; }
+               print MSG "\n";
+            }
+            $rule =~ s/(.*)\)$/$1 sid:$sid; rev:1;\)/;
+         }
+      }
+   }
+   push (@rules,$rule);
+}
+close RULES;
+
+open RULES,">$ARGV[0]";
+foreach (@rules)
+{
+   print RULES "$_\n";
+}
+
+open SID,">$SID";
+print SID "# \$Id\$\n$sid\n";

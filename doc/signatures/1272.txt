@@ -1,0 +1,61 @@
+Rule:  
+
+--
+
+Sid:
+1272
+
+--
+
+Summary:
+Someone probed for the sadmind RPC service, possibly to gather information before an attack.
+
+--
+Impact:
+If the target host runs Solaris with a vulnerable installation of sadmind, then this probe may have been a precursor to a remote root compromise.
+
+--
+Detailed Information:
+The sadmind RPC service runs by default in Solaris from inetd, and is vulnerable to a remote root exploit through buffer overflow in Solaris 2.5 through 7.0.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+An attacker runs an automated tool that connects to portmapper of the target host, probes for RPC, and repeatedly attacks the host to brute force the offset in the buffer overflow.
+
+--
+Ease of Attack:
+Tools to probe and attack sadmind are widely available and quite reliable.
+
+--
+False Positives:
+None Known
+sadmind has legitimate use in remote system administration through tools like Solstice AdminSuite.
+
+--
+False Negatives:
+None Known
+It is difficult to say from the given information, but it may not be necessary in some circumstances
+for an attacker to connect to the portmapper service before attacking the sadmind service.  A savvy attacker may use a port scanner or some other method to guess at the port of the sadmind service without consulting portmapper.
+
+--
+Corrective Action:
+If the source was not a known Solaris sysadmin running Solstice AdminSuite, then this probe should be considered highly suspicious and a likely precursor to attack. Try to determine whether the target system was running a vulnerable installation of sadmind or not.  One of the popular exploits for this service opens a root shell listening on TCP port 1524.  Because of the way this popular exploit is programmed, it makes repeated probes to portmapper for
+the sadmind service, and from each of those an attempt at the sadmind service itself, which is a very good indicator for this activity being an attack.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+David Wilburn <bug@gecko.roadtoad.net>	Initial Research
+
+--
+Additional References:
+CVE-1999-0977
+Bugtraq ID 866
+CERT advisory url http://www.cert.org/advisories/CA-1999-16.html
+

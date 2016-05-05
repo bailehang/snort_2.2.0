@@ -1,0 +1,77 @@
+# $Id: 1292.txt,v 1.2.2.2 2004/08/10 13:52:03 bmc Exp $
+
+Rule:
+
+RESPONSES http dir listing"; content: "Volume Serial Number";
+flow:from_server,established; classtype:bad-unknown; sid:1292; rev:4;)
+
+
+--
+Sid: 
+
+1292
+
+--
+Summary: 
+
+A post-compromise behavior indicating the use of Windows
+directory listing tools.
+
+--
+Impact: 
+
+attacker might have gained an ability to execute commands remotely
+
+--
+Detailed Information:
+
+The signature is aimed at catching the standard Windows commands for
+listing directories. The string "Volume Serial Number" is typically shown in
+front of the directory listing on Windows NT/2000/XP.  Seeing such a
+response in the HTTP traffic indicates that somebody have managed to
+"convince" the web server to spawn a shell bound to a web port and
+have successfully executed at least one command to list the
+directory. Note that the source address of this signature is actually
+the victim and not the attacker as for the exploit signatures.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+
+an attacker gains an access to a Windows web server via IIS vulnerability 
+and manages to start a cmd.exe shell. He then proceeds to look for 
+interesting files on the compromised server via the "dir" command.
+
+--
+Ease of Attack: 
+
+this post-attack behavior can accompany different attacks.
+
+--
+False Positives: 
+
+The signature will trigger if the string "Volume Serial Number" appears in the 
+content distributed by the web server, in which case the signature should be 
+tuned.
+
+--
+False Negatives:
+None Known
+
+
+--
+Corrective Action: 
+
+investigate the web server for signs of compromise,
+run the integrity checking software, look for other IDS alerts
+involving the same IP addresses.
+
+--
+Contributors: 
+
+Anton Chuvakin <http://www.chuvakin.org>
+
+-- 
+Additional References:

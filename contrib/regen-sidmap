@@ -1,0 +1,64 @@
+#!/usr/bin/perl
+# $Id: regen-sidmap,v 1.1 2001/10/04 15:02:13 cazz Exp $
+# Copyright (C) 2001 Brian Caswell <bmc@snort.org>
+# regen-sidmap
+#
+# Regenerate the sig-msg.map.
+# 
+# NOTE: This does not handle multi line signatures.  
+#
+# USAGE:
+# for i in *.rules ; do sid-ref.map $i; done
+
+### CONFIGURATION
+# Where are your snort rules held?
+# (CWD by default)
+
+my $DIR = "./";
+
+# Where is your sid-msg.map?
+my $SIDREF= "/tmp/sid-msg.map";
+### END OF CONFIGURATION
+
+
+if (($ARGS[0]))
+{ 
+  print "USAGE: regen-sidmap <SNORT-RULES-FILE> [<SNORT_RULES_DIRECTORY>]\n"; 
+  exit 0;
+}
+
+if ($ARGS[1]) { $DIR = $ARGS[1]; }
+
+my $sid;
+
+open RULES, "$ARGV[0]";
+open REFS, ">>$SIDREF";
+
+while (<RULES>)
+{
+   my $rule = $_;
+   $rule =~ s/\n$//;
+   if ($rule !~ /^#/)
+   {
+      if ($rule =~ /sid:\s*(\d+);/)
+      {
+	 my $sid = $1;
+
+         my $msg;
+	 if ($rule =~ /msg\s*:\s*"((?:(?<=\\)"|[^"])*)"\s*;/) {
+	    $msg = $1;
+         }
+
+ 	 my $ref = $rule;
+         my @refs;
+         while ($ref =~ s/(.*)reference\s*:\s*([^\;]+)(.*)$/$1 $3/)
+         { 
+            push (@refs,$2);
+         }
+         print REFS "$sid || $msg";
+         foreach (@refs) { print REFS " || $_"; }
+         print REFS "\n";
+      }
+   }
+}
+close RULES;

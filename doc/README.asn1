@@ -1,0 +1,70 @@
+ASN.1 Detection Capability
+--------------------------
+Author: Daniel Roelker
+
+The asn.1 detection plugin decodes a packet or a portion of a packet, and looks
+for various malicious encodings.
+
+The general configuration of the asn.1 rule option is as follows:
+
+asn1: [keyword [argument]], . . . 
+
+Multiple keywords can be used in an 'asn1' option and the implied logic is
+boolean OR.  So if any of the arguments evaluate as true, the whole option
+evaluates as true.
+
+ASN.1 Keywords
+--------------
+
+The ASN.1 keywords provide programmatic detection capabilities as well as some
+more dynamic type detection.  Most of the keywords don't have arguments as the
+detection is looking for non-configurable information.  If a keyword does have
+an argument, the keyword is followed by a comma and the argument is the next
+word.  If a keyword has multiple arguments, then a comman separates each.
+
+bitstring_overflow
+------------------
+
+The bitstring_overflow detects invalid bitstring encodings that are known to be
+remotely exploitable.
+
+double_overflow
+---------------
+
+The double_overflow detects an double ascii encoding that is larger than a
+standard buffer.  This is known to be an exploitable function in Microsoft, but
+it is unknown at this time which services may be exploitable.
+
+oversize_length
+---------------
+
+This detection keyword compares ASN.1 type lengths with the supplied argument.
+The syntax looks like, "oversize_length 500".  This means that if an ASN.1
+type is greater than 500, then this keyword is evaluated as true.  This
+keyword must have one argument and that is the length to compare against.
+
+absolute_offset
+----------
+
+This is the absolute offset from the beginning of the packet.  For example, if
+you wanted to decode snmp packets, you would say "absolute_offset, 0".  
+absolute_offset has one argument and that is the offset.  Offset may be
+positive or negative.
+
+relative_offset
+----------
+
+This is the relative offset from the last content match or byte_test/jump. 
+relative_offset has one argument and that is the offset number.  So if you 
+wanted to start decoding and ASN.1 sequence right after the content "foo", 
+you would specifiy 'content:"foo"; asn1: bitstring_overflow, 
+relative_offset, 0'.  Offset may be positive or negative.
+
+Examples
+--------
+
+alert udp any any -> any 161 (msg:"Oversize SNMP Length"; \
+    asn1: oversize_length, 10000, absolute_offset, 0;)
+    
+alert tcp any any -> any 80 (msg:"ASN1 Relative Foo"; content:"foo"; \
+    asn1: bitstring_overflow, print, relative_offset, 0;)

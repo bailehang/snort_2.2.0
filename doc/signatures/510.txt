@@ -1,0 +1,66 @@
+Rule:
+--
+JetDirect LCD modification attempt"; flags:A+; content:"@PJL RDYMSG
+DISPLAY ="; classtype:misc-activity; reference:bugtraq,2245;
+reference:arachnids,302; sid:510; rev:3;) 
+
+Sid:
+--
+510
+
+Summary:
+--
+An attempt to change the message on the LCD display on a
+JetDirect-enabled HP printer was detected.
+
+--
+Impact:
+User confusion and comedy, mostly.
+
+--
+Detailed Information:
+The HP JetDirect printers allow remote machines to change the message
+that is displayed on the LCD panel. 
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+As part of an attempt to confuse and annoy users, an attacker may
+attempt to change the previously mentioned message.  
+__
+Ease of Attack:
+Relatively simple.  All that is required is a way to connect to the
+JetDirect port of the victim printer and a minimal knowledge of how
+JedDirect works.  A telnet/nc client would suit the job well, but
+there are also many featureful programs that'll allow you to
+accomplish the same ends.
+
+--
+False Positives:
+None Known
+This rule will get triggered everytime a legitimate print job is
+executed and the display is updated.
+
+--
+False Negatives:
+None Known
+None.
+
+--
+Corrective Action:
+Update to the latest JetDirect, and investigate the possibility of
+restricting access to a central print-server using the "allow: <ip>
+<netmask>" directive in a printer config file. 
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+Jon Hart <warchild@spoofed.org>
+
+-- 
+Additional References:

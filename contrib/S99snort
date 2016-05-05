@@ -1,0 +1,85 @@
+#!/bin/bash
+# $Id: S99snort,v 1.1 2001/12/18 22:14:37 cazz Exp $
+# /etc/init.d/snort : start or stop the SNORT Intrusion Database System
+#
+# Written by Lukasz Szmit <ptashek@scg.gliwice.pl>
+#
+# Configuration
+
+# set config file & path to snort executable
+SNORT_PATH=/usr/local/bin
+CONFIG=/usr/local/share/snort/snort.conf
+
+# set interface
+IFACE=eth0
+
+# set GID/Group Name
+SNORT_GID=nogroup
+
+# other options
+OPTIONS="-D"
+
+# End of configuration
+
+
+test -x $SNORT_PATH/snort || exit 0
+
+case "$1" in
+     start)
+	echo "Starting Intrusion Database System: SNORT"
+	$SNORT_PATH/snort -c $CONFIG -i $IFACE -g $SNORT_GID $OPTIONS
+	if [ "`pidof $SNORT_PATH/snort`" ]; then
+		echo "SNORT is up and running!"
+	else
+		exit 0
+	fi
+	echo -n "."
+	;;
+
+     stop)
+	echo "Stoping Intrusion Database System: SNORT"
+	if [ "`pidof $SNORT_PATH/snort`" ] ; then
+	
+	    kill -TERM `pidof $SNORT_PATH/snort`
+
+	    # Wait until the timeout
+	    count=120
+	    numdots=0
+	    while ([ $count != 0 ]) do
+		let count=$count-1
+		if [ "`pidof $SNORT_PATH/snort`" ] ; then
+		    echo -n .
+		    let numdots=$numdots+1
+		    sleep 1
+		else
+		    count=0
+		fi
+	    done
+
+	    # If it's not dead yet, kill it.
+
+	    if [ "`pidof $SNORT_PATH/snort`" ] ; then
+		echo " TIMEOUT!"
+		kill -KILL `$SNORT_PATH/snort`
+	    else
+		case $numdots in
+		  0) echo "." ;;
+		  1) echo ;;
+		  *) echo " done." ;;
+		esac
+	    fi
+	else
+	    echo "SNORT is  not running!";
+	fi
+	;;
+     restart)
+	$0 stop
+	$0 start
+	;;
+     *)
+	echo 'Usage: /etc/init.d/snort {start|stop|restart}'
+	exit 1
+	;;
+esac
+exit 0
+;;

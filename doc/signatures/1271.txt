@@ -1,0 +1,77 @@
+Note:  Please consider adding CVE-1999-0626 as a reference inside this rule.
+
+Rule:  
+
+--
+
+Sid:
+1271
+
+--
+
+Summary:
+Someone probed for the rusers RPC service, possibly to gather information
+before an attack.
+
+--
+Impact:
+An attacker may have gotten a listing of the users logged into the target
+system.
+
+--
+Detailed Information:
+The rusers RPC service is used to remotely list all logged in users on a
+machine.  Discovering this information may be useful to an attacker.
+Because of the nature of RPC, the actual rusers access occurs in a seperate
+network session on an arbitrary port.
+
+--
+Affected Systems:
+ 
+--
+Attack Scenarios:
+An attacker runs a vulnerability assessment tool, or the standard Unix
+rusers command.  The attacker may use information gleaned from this to
+better target his attacks.
+
+--
+Ease of Attack:
+Tools to probe the rusers service come standard with most Unix variants.
+
+--
+False Positives:
+None Known
+Listing the users logged in is exactly what the rusers system is designed
+to do.  It is unwise to run on a security-conscious network, but there may
+be some legitimate uses of rusers.
+
+--
+False Negatives:
+None Known
+This signature detects probes of the portmapper service for rusers, not
+probes of the rusers service itself.
+Due to the nature of RPC services often sitting on fairly arbitrary ports,
+it may not be possible for a NIDS to reliably detect (mis)uses of the
+rusers service itself.  If no probe is detected against the rusers service
+itself, do not assume that there was no such activity.  The opposite is also
+true; an attacker may attempt to go directly to the rusers port without
+querying the portmapper service, in which case this signature will not fire.
+
+--
+Corrective Action:
+Try to determine whether the target system was running rusers or not.  Because
+the rusers service itself represents a potentially dangerous exposure,
+consider disabling the rusers service if it has not already been disabled.
+Try to determine whether this activty was part of a larger reconnaissance
+effort, predecessor to an attack, or legitimate use.
+
+--
+Contributors:
+Original rule writer unknown
+Original document author unkown
+Sourcefire Vulnerability Research Team
+Nigel Houghton <nigel.houghton@sourcefire.com>
+
+--
+Additional References:
+CVE:  CVE-1999-0626
